@@ -1,9 +1,10 @@
 from cms.api import add_plugin, create_page
+from django.test import override_settings
 from cms.test_utils.testcases import CMSTestCase
+from django.utils.translation import activate
 
 from djangocms_picture.cms_plugins import PicturePlugin
 from djangocms_picture.models import get_alignment
-
 from .helpers import get_filer_image
 
 
@@ -43,7 +44,9 @@ class PicturePluginsTestCase(CMSTestCase):
         plugin.full_clean()
         self.assertEqual(plugin.plugin_type, "PicturePlugin")
 
+    @override_settings(LANGUAGE_CODE='de')
     def test_plugin_structure(self):
+        activate('de')
         request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
 
         plugin = add_plugin(
@@ -53,12 +56,14 @@ class PicturePluginsTestCase(CMSTestCase):
             picture=self.picture,
         )
         self.page.publish(self.language)
-        self.assertEqual(plugin.get_plugin_class_instance().name, "Image")
+        self.assertEqual(plugin.get_plugin_class_instance().name, "Bild")
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
+        print(response.content)
         self.assertContains(response, 'src="/media/filer_public_thumbnails/filer_public')
+        self.assertContains(response, '800.0w')
 
         # test that alignment is added
         plugin = add_plugin(

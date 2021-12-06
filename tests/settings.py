@@ -9,11 +9,26 @@ HELPER_SETTINGS = {
         'mptt',
     ],
     'CMS_LANGUAGES': {
-        1: [{
-            'code': 'en',
-            'name': 'English',
-        }]
+        1: [
+            {
+                'code': 'en',
+                'name': 'English',
+            },
+            {
+                'code': 'de',
+                'name': 'German',
+            },
+        ]
     },
+    'LANGUAGES': [
+        ('en', 'English'),
+        ('de', 'German'),
+        ('fr', 'French'),
+        ('es', 'Spanish'),
+        ('it', 'Italian'),
+        ('zh-hans', 'Chinese'),
+    ],
+    'USE_L10N': True,
     'LANGUAGE_CODE': 'en',
     'THUMBNAIL_PROCESSORS': (
         'easy_thumbnails.processors.colorspace',
